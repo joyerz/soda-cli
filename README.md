@@ -1,6 +1,13 @@
 # soda cli - backoffice cli
 ---
 
+## 安装
+---
+```shell
+npm install soda-bo-cli -g
+```
+
+
 ## 初始化
 ---
 ```shell
