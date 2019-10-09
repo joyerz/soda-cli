@@ -7,7 +7,7 @@ const colors = require('colors')
 
 
 program
-  .version('0.0.17','-v, --vers', 'output the current version')
+  .version('0.0.18','-v, --vers', 'output the current version')
   .description('soda-cli命令行工具')
 
 program
