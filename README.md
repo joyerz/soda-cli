@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # soda cli - backoffice cli
 
 ## 安装
@@ -17,3 +18,6 @@ sbc tsinit // 初始化ts项目
 sbc page <pageName> // 在src/pages目录下新建"pageName"模块, "pageName"可以接受次级目录比如: "companyManage/city"
 sbc tspage <pageName> // 在src/pages目录下新建<ts>"pageName"模块, "pageName"可以接受次级目录比如: "companyManage/city"
 ```
+=======
+# Hala
+>>>>>>> 04d83e20c76adea5c18539a27d66ba5b3981f6e4
