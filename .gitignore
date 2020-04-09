@@ -1,2 +1,10 @@
 node_modules/
 .idea/
+dist/
+UI/
+build/reduxSagaHelperPlugin.js
+mock/fileUpload/uploads/*
+*.yml
+Dockerfile
+web.conf
+.DS_Store
