@@ -245,7 +245,7 @@ program
       // })
     }
     else {
-      console.log('请输入正确的page, 如 soda-bo-cli page PAGENAME'.white)
+      console.log('请输入正确的page, 如 soda-bo-cli tspage PAGENAME'.white)
     }
   })
 
