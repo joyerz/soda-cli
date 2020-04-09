@@ -7,16 +7,17 @@ const path = require('path')
 const chalk = require('chalk')
 const inquirer = require('inquirer')
 const shell = require('shelljs')
+const config = require('dotenv').config()
 
 module.exports = function (dirName) {
   // const dirName = process.argv[2]
   if (!dirName) {
-    console.log(chalk.red(` 请输入路由名称 \n eg: $ sbc taropage User`))
+    console.log(chalk.red(` 请输入路由名称 \n eg: $ sbc new User`))
     process.exit(0)
   }
 
   /**
-   * 模板
+   * 默认模板
    */
   const funName = toHump(dirName).replace(/\-/g, '_')
   let tsxTpl = `import Taro, { Component } from '@tarojs/taro'
@@ -92,20 +93,23 @@ export default combineReducers({
   const pageTplConf = [
     {
       filename: 'index.tsx',
-      tplFilename: 'ztpl_tsx.tpl',
+      tplFilename: config.parsed.TPL_TSX_PATH || '',
       tplstr: tsxTpl,
     },
     {
       filename: 'index.module.scss',
-      tplFilename: 'ztpl_scss.tpl',
+      tplFilename: config.parsed.TPL_SCSS_PATH || '',
       tplstr: scssTpl,
     },
     {
       filename: 'redux.ts',
-      tplFilename: 'ztpl_redux.tpl',
+      tplFilename: config.parsed.TPL_REDUX_PATH || '',
       tplstr: reduxTpl,
     },
-  ]
+  ].map(item => {
+    item.tplFilename = path.join(shell.pwd().toString(), item.tplFilename)
+    return item
+  })
 
   const _dirPwd = path.resolve(`./src/pages/${dirName.replace(/^\//, '')}`)
   const reducerPwd = path.resolve(`./src/store/reducers.ts`)
@@ -136,7 +140,7 @@ export default combineReducers({
    * @param {*} exisit 目录是否存在（存在则忽略app.js 和link.js的追加）
    */
   function run(exisit) {
-    
+    console.log(chalk.magenta('creating...'))
     if (!exisit) {
       // 新增src/app.js路由配置
       replaceTpl('./src/app.tsx', `'pages/${dirName}/index',\n\t\t\t// __PUSH_DATA`)
@@ -174,13 +178,14 @@ export default combineReducers({
 
     // 写入模板
     for (let tpl of pageTplConf) {
-      let tplpath = path.resolve(__dirname, `./${tpl.tplFilename}`)
-      if (fs.existsSync(tplpath)) {
-        let _str = fs.readFileSync(tplpath, 'utf-8')
+      if (fs.existsSync(tpl.tplFilename) && fs.lstatSync(tpl.tplFilename).isFile()) {
+        let _str = fs.readFileSync(tpl.tplFilename, 'utf-8')
         if (_str) {
           tpl.tplstr = _str.replace(/\$\{funName\}/g, funName)
             .replace(/\$\{dirName\}/g, dirName.toLocaleLowerCase())
         }
+      } else {
+        console.log(chalk.red(`[错误] ${tpl.tplFilename}不存在/不是一个文件，将使用默认模板.`))
       }
       fs.writeFileSync(tpl.filename, tpl.tplstr)
       console.log(msg + chalk.green(`/src/pages/${dirName}/` + tpl.filename))
@@ -191,7 +196,7 @@ export default combineReducers({
     try {
       let _reduxTxt = fs.readFileSync(reducerPwd)
       _reduxTxt = _reduxTxt.toString()
-      fs.writeFileSync(reducerPwd, _reduxTxt)
+      fs.writeFileSync(reducerPwd, _reduxTxt + ' ')
       console.log(chalk.blue(`[已更新] `) + chalk.green(`reducer`))
     } catch (e) {
       console.log(chalk.red(`[错误] ` + e.message))
@@ -227,7 +232,7 @@ export default combineReducers({
     const isExist = fs.existsSync(filePwd)
     
     if (!isExist) {
-      return console.log(chalk.red(`${filePwd} 不存在`))
+      return console.log(chalk.red(`[错误] ${filePwd} 不存在`))
     }
     let _txt = fs.readFileSync(filePwd)
     _txt = _txt.toString()

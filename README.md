@@ -1,23 +1,48 @@
-<<<<<<< HEAD
-# soda cli - backoffice cli
 
-## 安装
-```shell
-npm install soda-bo-cli -g
+# sodacli
+
+## Global install ⚙️
+
+### Envirment requirement
+
+NodeJS: >= 8.0
+
+OS: MacOS, windows, centos
+
+### install
+
+```bash
+$ npm install sodacli -g  / yarn global add sodacli
+```
+
+### Create a project 
+```bash
+$ sodacli init
 ```
 
 
-## 初始化
-```shell
-sbc init // 在当前目录初始化项目
-sbc tsinit // 初始化ts项目
+### push to git 
+
+```bash
+$ sodacli push
 ```
 
-## 新建page
-```shell
-sbc page <pageName> // 在src/pages目录下新建"pageName"模块, "pageName"可以接受次级目录比如: "companyManage/city"
-sbc tspage <pageName> // 在src/pages目录下新建<ts>"pageName"模块, "pageName"可以接受次级目录比如: "companyManage/city"
+### Select an executable command
+
+```bash
+$ sodacli run
 ```
-=======
-# Hala
->>>>>>> 04d83e20c76adea5c18539a27d66ba5b3981f6e4
+
+### Start a static service
+
+```bash
+$ sodacli server
+
+# -p, --port      set my prot
+# -s, --silent    don't open browser
+# -d, --dir       run dir. current as default
+# -l, --log       print url log
+# -f, --fallback  Enable history fallback
+# -h, --help      output usage information
+
+```
