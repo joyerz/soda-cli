@@ -12,31 +12,36 @@ OS: MacOS, windows, centos
 ### install
 
 ```bash
-$ npm install sodacli -g  / yarn global add sodacli
+$ npm install soda-bo-cli -g  / yarn global add soda-bo-cli
 ```
 
 ### Create a project 
 ```bash
-$ sodacli init
+$ sbc init
+```
+
+### new Page 
+```bash
+$ sbc new <pageName>  # sbc new User or sbc new User/Login
 ```
 
 
 ### push to git 
 
 ```bash
-$ sodacli push
+$ sbc push
 ```
 
 ### Select an executable command
 
 ```bash
-$ sodacli run
+$ sbc run
 ```
 
 ### Start a static service
 
 ```bash
-$ sodacli server
+$ sbc server
 
 # -p, --port      set my prot
 # -s, --silent    don't open browser
@@ -45,4 +50,12 @@ $ sodacli server
 # -f, --fallback  Enable history fallback
 # -h, --help      output usage information
 
+```
+
+### Select npm/yarn mirror
+
+```bash
+$ sbc origin ls  # view all canuse mirror
+
+$ sbc origin use # choose mirror
 ```

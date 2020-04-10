@@ -12,9 +12,10 @@ const create = require('../packages/actions/create')
 const newpage = require('../packages/actions/newpage')
 const gitpush = require('../packages/actions/gitpush')
 const run = require('../packages/actions/run')
+const npmMirror = require('../packages/actions/npm-mirror')
 const server = require('../packages/actions/server')
 
-if (!['init', 'new', 'push', 'run', 'server', ].includes(process.argv[2])) {
+if (!['init', 'new', 'push', 'run', 'server', 'origin'].includes(process.argv[2])) {
   printPkgVersion()
 }
 
@@ -59,6 +60,13 @@ program
   .command('new <pagepath>')
   .description('create a module/page template.')
   .action(newpage)
+
+
+// npm/yarn 镜像管理
+program
+  .command('origin <command>')
+  .description('change npm/yarn mirror, sbc origin ls / sbc origin use')
+  .action(npmMirror)
 
 
 program.parse(process.argv)
