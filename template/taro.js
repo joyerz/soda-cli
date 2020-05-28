@@ -20,7 +20,7 @@ module.exports = function (dirName) {
    * 默认模板
    */
   const funName = toHump(dirName).replace(/\-/g, '_')
-  let tsxTpl = `import Taro, { Component } from '@tarojs/taro'
+  let tsxTpl = `import Taro, { Component, CommonPageConfig } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { connect, } from '@tarojs/redux'
 import { Actions } from 'store/helper/actions'
@@ -35,12 +35,12 @@ interface State {
   state1: string
 }
 
-@connect((state: TState) => ({
+@connect<Props>((state: TState) => ({
   list: state.${funName}.list
 }))
 class ${funName} extends Component<Props, State> {
 
-  config = {
+  config: CommonPageConfig = {
     navigationBarTitleText: '${funName}'
   }
 
