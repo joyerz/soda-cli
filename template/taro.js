@@ -21,9 +21,9 @@ module.exports = function (dirName) {
    */
   const funName = toHump(dirName).replace(/\-/g, '_')
   let tsxTpl = `import Taro, { Component, CommonPageConfig } from '@tarojs/taro'
+import { InitState, Entries } from 'src/@types/state'
+import { injcet, Action } from 'store/helper'
 import { View } from '@tarojs/components'
-import { connect, } from '@tarojs/redux'
-import { Actions } from 'store/helper/actions'
 
 import style from './index.module.scss'
 
@@ -35,9 +35,7 @@ interface State {
   state1: string
 }
 
-@connect<Props>((state: TState) => ({
-  list: state.${funName}.list
-}))
+@injcet(['${funName}'])
 class ${funName} extends Component<Props, State> {
 
   config: CommonPageConfig = {
@@ -45,7 +43,7 @@ class ${funName} extends Component<Props, State> {
   }
 
   componentDidMount() {
-    Actions.${funName}.start()
+    Action.${funName}.start()
   }
 
   render() {
@@ -68,8 +66,9 @@ export default ${funName}
 }`
 
   let reduxTpl = `import { buildRedux } from 'store/helper'
-import { combineReducers } from 'redux'
 import api from 'config/api'
+
+export const MODULE_NAME = ''
 
 export type DemoPayload = Payload<{
   id: number
@@ -83,10 +82,6 @@ export const list = buildRedux('${funName}')({
   // *onResult(res, payload: DemoPayload, { put }) { return {} },   // * 处理数据返回一个新的数据
   // *onAfter() {},  // * action.success 后 执行的操作
   // *onError() {},  // *  错误处理
-})
-
-export default combineReducers({
-  list: list.reducer,
 })
 `
 
@@ -151,10 +146,13 @@ export default combineReducers({
       })
 
       // 新增src/@types/state.d.ts 中的默认接口
-      replaceTpl('./src/@types/state.d.ts', `${funName}: {\n\t\tlist: InitState<Entries>\n\t}\n\t// __PUSH_DATA`)
+      replaceTpl('./src/@types/state.d.ts', {
+        '// __PUSH_IMPORT': `import * as ${funName} from '../pages/${dirName}/redux'\n// __PUSH_IMPORT`,
+        '// __PUSH_DATA': `${funName}: {\n\t\t[k in Exclude<keyof typeof ${funName}, 'MODULE_NAME'>]: InitState<Entries>\n\t}\n\t// __PUSH_DATA`,
+      })
 
       // 新增src/@types/actions.d.ts 中的默认接口
-      replaceTpl('./src/@types/actions.d.ts', `${funName}: CommonActions<Payload<{ name: string }>>\n\t// __PUSH_DATA`)
+      // replaceTpl('./src/@types/actions.d.ts', `${funName}: CommonActions<Payload<{ name: string }>>\n\t// __PUSH_DATA`)
 
       // 替换config 中的  h5自定义路由 （如果是h5项目的情况下） '/pages/index/index': '/index',
       replaceTpl(
@@ -193,14 +191,14 @@ export default combineReducers({
 
 
     // 更新./src/store/reducers.js
-    try {
-      let _reduxTxt = fs.readFileSync(reducerPwd)
-      _reduxTxt = _reduxTxt.toString()
-      fs.writeFileSync(reducerPwd, _reduxTxt + ' ')
-      console.log(chalk.blue(`[已更新] `) + chalk.green(`reducer`))
-    } catch (e) {
-      console.log(chalk.red(`[错误] ` + e.message))
-    }
+    // try {
+    //   let _reduxTxt = fs.readFileSync(reducerPwd)
+    //   _reduxTxt = _reduxTxt.toString()
+    //   fs.writeFileSync(reducerPwd, _reduxTxt + ' ')
+    //   console.log(chalk.blue(`[已更新] `) + chalk.green(`reducer`))
+    // } catch (e) {
+    //   console.log(chalk.red(`[错误] ` + e.message))
+    // }
     process.exit(0)
   }
 
