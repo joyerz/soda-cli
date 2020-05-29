@@ -77,13 +77,4 @@ module.exports = async function (args) {
   shell.mv(zippath + '/*', './')
   shell.rm('-rf', zippath + '/')
   complete()
-
-  // mkdirSync(targetPwd)
-  // clone(tplPath, targetPwd + '/tmp', null, function () {
-  //   shell.rm('-rf', targetPwd + `/tmp/.git`)
-  //   shell.mv(targetPwd + '/tmp/.*', targetPwd + '/')
-  //   shell.mv(targetPwd + '/tmp/*', targetPwd + '/')
-  //   shell.rm('-rf', targetPwd + `/tmp/`)
-  //   complete()
-  // })
 }
