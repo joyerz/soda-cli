@@ -148,7 +148,8 @@ export const list = buildRedux('${funName}')({
       // 新增src/@types/state.d.ts 中的默认接口
       replaceTpl('./src/@types/state.d.ts', {
         '// __PUSH_IMPORT': `import * as ${funName} from '../pages/${dirName}/redux'\n// __PUSH_IMPORT`,
-        '// __PUSH_DATA': `${funName}: {\n\t\t[k in Exclude<keyof typeof ${funName}, 'MODULE_NAME'>]: InitState<Entries>\n\t}\n\t// __PUSH_DATA`,
+        '// __PUSH_DATA': `\ntype ${funName}State = {\n\t[k in ModuleName<typeof ${funName}['MODULE_NAME'], '${funName}'>]: {\n\t\t[k in Exclude<keyof typeof ${funName}, 'MODULE_NAME'>]: InitState<Entries>\n\t}\n}\n// __PUSH_DATA`,
+        '// __PUSH_DATA_&': `& ${funName}State\n\t// __PUSH_DATA`,
       })
 
       // 新增src/@types/actions.d.ts 中的默认接口
